@@ -1,13 +1,12 @@
 package com.gfan.sbbs.ui.main;
 
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.util.Log;
+import android.widget.CheckBox;
 
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
@@ -16,12 +15,13 @@ import com.gfan.sbbs.othercomponent.Preferences;
 
 public class Preference extends SherlockPreferenceActivity implements
 		OnPreferenceChangeListener,OnPreferenceClickListener {
-	private CheckBoxPreference rememberBox, autoLoginBox,isNightBox;
-	private EditTextPreference blackListSettings;
-	private ListPreference mStartPage;
-	private ListPreference mFontAjustPreference;
+//	private EditTextPreference blackListSettings;
+//	private ListPreference mStartPage;
+//	private ListPreference mFontAjustPreference;
 //	private MyApplication application;
+	private CheckBoxPreference rememberBox;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setTheme(com.actionbarsherlock.R.style.Theme_Sherlock);
@@ -32,36 +32,24 @@ public class Preference extends SherlockPreferenceActivity implements
 		init();
 	}
 
-	@SuppressWarnings("deprecation")
 	private void init() {
-		rememberBox = (CheckBoxPreference) this
-				.findPreference("pref_remember_me");
-		autoLoginBox = (CheckBoxPreference) this
-				.findPreference("pref_autologin");
-		isNightBox = (CheckBoxPreference) this.findPreference(Preferences.NIGHT_MODE);
-		
-		mFontAjustPreference = (ListPreference) this.findPreference(Preferences.FONT_SIZE_ADJUST);
-		blackListSettings = (EditTextPreference)this.findPreference(Preferences.BLACKLIST);
-		mStartPage = (ListPreference) this.findPreference(Preferences.SELECT_PAGE);
-		blackListSettings.setOnPreferenceChangeListener(this);
-		mStartPage.setOnPreferenceChangeListener(this);
-		mStartPage.setOnPreferenceClickListener(this);
-		isNightBox.setOnPreferenceChangeListener(this);
-		isNightBox.setOnPreferenceClickListener(this);
+		rememberBox = (CheckBoxPreference) this.findPreference(Preferences.REMEMBER_ME);
+		rememberBox.setOnPreferenceChangeListener(this);
 	}
 
 
 	@Override
 	public boolean onPreferenceChange(android.preference.Preference preference,
 			Object newValue) {
-		if(preference.getKey().equals(Preferences.NIGHT_MODE)){
-			MyApplication.isNightMode = (Boolean) newValue;
-		}
-		if(preference.getKey().equals(Preferences.FONT_SIZE_ADJUST)){
-			SharedPreferences prefs = MyApplication.getInstance().getmPreference();
-			Editor editor = prefs.edit();
-			editor.putString(Preferences.FONT_SIZE_ADJUST, (String)newValue);
-			editor.commit();
+
+
+		if(preference.getKey().equals(Preferences.REMEMBER_ME)){
+			if((Boolean)newValue == false){
+				SharedPreferences.Editor editor = MyApplication.getInstance().getmPreference().edit();
+				editor.putBoolean(Preferences.AUTOLOGIN, false);
+				editor.commit();
+			}
+			
 		}
 		return true;
 	}

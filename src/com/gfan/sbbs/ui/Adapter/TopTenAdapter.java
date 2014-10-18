@@ -11,6 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.gfan.sbbs.bean.Topic;
+import com.gfan.sbbs.othercomponent.MyApplication;
+import com.gfan.sbbs.othercomponent.Preferences;
 import com.gfan.sbbs.ui.main.R;
 
 public class TopTenAdapter extends BaseAdapter {
@@ -26,6 +28,7 @@ public class TopTenAdapter extends BaseAdapter {
 	public TopTenAdapter(LayoutInflater mInflater){
 		this.topList = new ArrayList<Topic>();
 		this.mInflater = mInflater;
+		this.context = MyApplication.getInstance().getActivity();
 	}
 
 	@Override
@@ -83,6 +86,24 @@ public class TopTenAdapter extends BaseAdapter {
 		holder.txt_board.setText(topic.getBoardName()+"版");
 		holder.readView.setText(topic.getReplies() + "/"
 				+ topic.getPopularity());
+		String fontSize = MyApplication.getInstance().getmPreference().getString(Preferences.FONT_SIZE_ADJUST, "Normal");
+		
+		if(fontSize.equals(Preferences.FONT_SIZE_LARGE)){
+			holder.txt_author.setTextAppearance(context, R.style.AuthorText_Large);
+			holder.txt_title.setTextAppearance(context, R.style.TitleText_Large);
+			holder.readView.setTextAppearance(context, R.style.TimeText_Large);
+			holder.txt_board.setTextAppearance(context, R.style.normalText);
+		}else if(fontSize.equals(Preferences.FONT_SIZE_SMALL)){
+			holder.txt_author.setTextAppearance(context, R.style.AuthorText_Small);
+			holder.txt_title.setTextAppearance(context, R.style.TitleText_Small);
+			holder.readView.setTextAppearance(context, R.style.TimeText_Small);
+			holder.txt_board.setTextAppearance(context, R.style.normalText_tiny);
+		}else{
+			holder.txt_author.setTextAppearance(context, R.style.AuthorText_Normal);
+			holder.txt_title.setTextAppearance(context, R.style.TitleText_Normal);
+			holder.readView.setTextAppearance(context, R.style.TimeText_Normal);
+			holder.txt_board.setTextAppearance(context, R.style.normalText_small);
+		}
 		return convertView;
 	}
 

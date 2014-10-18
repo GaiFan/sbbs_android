@@ -45,7 +45,7 @@ public class UserTable implements BaseColumns {
 		User user = new User();
 		String user_ID = cursor.getString(cursor.getColumnIndex(USER_ID));
 		String user_name = cursor.getString(cursor.getColumnIndex(USER_NAME));
-		
+		user.setId(user_ID).setNickName(user_name);
 		return user;
 	}
 }

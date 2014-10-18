@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.gfan.sbbs.bean.Topic;
 import com.gfan.sbbs.dao.topic.PostHelper;
 import com.gfan.sbbs.othercomponent.MyApplication;
+import com.gfan.sbbs.othercomponent.Preferences;
 import com.gfan.sbbs.ui.main.ImagePagerActivity;
 import com.gfan.sbbs.ui.main.R;
 import com.gfan.sbbs.utils.MyGridView;
@@ -155,6 +156,26 @@ public class TopReplyAdapter extends BaseAdapter {
 			});
 		}else{
 			holder.myGridView.setVisibility(View.INVISIBLE);
+		}
+		String fontSize = MyApplication.getInstance().getmPreference().getString(Preferences.FONT_SIZE_ADJUST, "Normal");
+		if(fontSize.equals(Preferences.FONT_SIZE_LARGE)){
+			holder.txt_author.setTextAppearance(context, R.style.AuthorText_Large);
+			holder.txt_content.setTextAppearance(context, R.style.BodyText_Large);
+			holder.txt_quote.setTextAppearance(context, R.style.QuoteText_Large);
+			holder.txt_quoter.setTextAppearance(context, R.style.QuoteText_Large);
+			holder.txt_time.setTextAppearance(context, R.style.TimeText_Large);
+		}else if(fontSize.equals(Preferences.FONT_SIZE_SMALL)){
+			holder.txt_author.setTextAppearance(context, R.style.AuthorText_Small);
+			holder.txt_content.setTextAppearance(context, R.style.BodyText_Small);
+			holder.txt_quote.setTextAppearance(context, R.style.QuoteText_Small);
+			holder.txt_quoter.setTextAppearance(context, R.style.QuoteText_Small);
+			holder.txt_time.setTextAppearance(context, R.style.TimeText_Small);
+		}else{
+			holder.txt_author.setTextAppearance(context, R.style.AuthorText_Normal);
+			holder.txt_content.setTextAppearance(context, R.style.BodyText_Normal);
+			holder.txt_quote.setTextAppearance(context, R.style.QuoteText_Normal);
+			holder.txt_quoter.setTextAppearance(context, R.style.QuoteText_Normal);
+			holder.txt_time.setTextAppearance(context, R.style.TimeText_Normal);
 		}
 		return convertView;
 	}

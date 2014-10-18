@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.gfan.sbbs.bean.Topic;
 import com.gfan.sbbs.othercomponent.MyApplication;
+import com.gfan.sbbs.othercomponent.Preferences;
 import com.gfan.sbbs.ui.main.R;
 
 public class TopicListAdapter extends BaseAdapter {
@@ -51,7 +52,7 @@ public class TopicListAdapter extends BaseAdapter {
 			convertView = inflater.inflate(R.layout.listview_topic_list_item,
 					null);
 			holder = new ViewHolder();
-			holder.title = (TextView) convertView
+			holder.titleView = (TextView) convertView
 					.findViewById(R.id.topic_title);
 			// holder.num = (TextView) convertView.findViewById(R.id.topic_num);
 			holder.authorView = (TextView) convertView
@@ -71,17 +72,17 @@ public class TopicListAdapter extends BaseAdapter {
 		holder.readView.setText("(" + topic.getPopularity() + ")");
 		if (topicList.get(position).isOnTop()) {
 			Log.i(TAG, topicList.get(position).getTitle());
-			holder.title.setText("[置顶]" + topic.getTitle());
+			holder.titleView.setText("[置顶]" + topic.getTitle());
 		} else {
 			if (topic.getId() == topic.getReid()) {
-				holder.title.setText("●".concat(topic.getTitle()));
+				holder.titleView.setText("●".concat(topic.getTitle()));
 			} else {
-				holder.title.setText(topic.getTitle());
+				holder.titleView.setText(topic.getTitle());
 			}
 		}
 		Log.i(TAG, "SBBSupport:topic unread is " + topic.isUnRead());
 		// TODO distinguish the unread item under night mode
-		if (!MyApplication.isNightMode) {
+		if (!MyApplication.getInstance().isNightMode()) {
 			if (topic.isUnRead()) {
 				convertView.setBackgroundColor(0xffF5F5F5);
 				// holder.title.getPaint().setFakeBoldText(true);
@@ -89,6 +90,23 @@ public class TopicListAdapter extends BaseAdapter {
 				convertView.setBackgroundColor(0xffE4E4E4);
 				// holder.title.getPaint().setFakeBoldText(false);
 			}
+		}
+		String fontSize = MyApplication.getInstance().getmPreference().getString(Preferences.FONT_SIZE_ADJUST, "Normal");
+		if(fontSize.equals(Preferences.FONT_SIZE_LARGE)){
+			holder.authorView.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.AuthorText_Large);
+			holder.timeView.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.TimeText_Large);
+			holder.titleView.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.TitleText_Large);
+			holder.readView.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.TimeText_Large);
+		}else if(fontSize.equals(Preferences.FONT_SIZE_SMALL)){
+			holder.authorView.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.AuthorText_Small);
+			holder.timeView.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.TimeText_Small);
+			holder.titleView.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.TitleText_Small);
+			holder.readView.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.TimeText_Small);
+		}else{
+			holder.authorView.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.AuthorText_Normal);
+			holder.timeView.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.TimeText_Normal);
+			holder.titleView.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.TitleText_Normal);
+			holder.readView.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.TimeText_Normal);
 		}
 		return convertView;
 	}
@@ -106,7 +124,7 @@ public class TopicListAdapter extends BaseAdapter {
 		// TextView num;
 		TextView authorView;
 		TextView timeView;
-		TextView title;
+		TextView titleView;
 		TextView readView;
 	}
 }

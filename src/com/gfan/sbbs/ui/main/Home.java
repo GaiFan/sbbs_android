@@ -6,7 +6,6 @@ import java.net.URLEncoder;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.ViewPager;
@@ -59,7 +58,7 @@ public class Home extends SherlockFragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 //		com.umeng.common.Log.LOG = true;
-		if (!MyApplication.isNightMode) {
+		if (!MyApplication.getInstance().isNightMode()) {
 			setTheme(com.actionbarsherlock.R.style.Theme_Sherlock_Light);
 		}else{
 			setTheme(com.actionbarsherlock.R.style.Theme_Sherlock);
@@ -87,7 +86,7 @@ public class Home extends SherlockFragmentActivity implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (!MyApplication.isNightMode) {
+		if (!MyApplication.getInstance().isNightMode()) {
 			setTheme(com.actionbarsherlock.R.style.Theme_Sherlock_Light);
 		}else{
 			setTheme(com.actionbarsherlock.R.style.Theme_Sherlock);
@@ -116,7 +115,7 @@ public class Home extends SherlockFragmentActivity implements
 		// TODO
 //		mHomePager.setOffscreenPageLimit(0);
 		Log.i(TAG, "start page is " + application.getStartPage());
-		if (MyApplication.checkLogin() && application.getStartPage() == 1) {
+		if (MyApplication.getInstance().checkLogin() && application.getStartPage() == 1) {
 			mHomePager.setCurrentItem(1);
 			getSupportActionBar().setNavigationMode(
 					ActionBar.NAVIGATION_MODE_STANDARD);
@@ -215,7 +214,7 @@ public class Home extends SherlockFragmentActivity implements
 	protected void schedule() {
 		boolean isUpdateEnabled = MyApplication.mPreference.getBoolean(
 				Preferences.CHECK_UPDATE, false);
-		boolean isLogined = MyApplication.checkLogin();
+		boolean isLogined = MyApplication.getInstance().checkLogin();
 		if (isUpdateEnabled && isLogined) {
 			SBBSService.schedule(this);
 		}
@@ -308,12 +307,9 @@ public class Home extends SherlockFragmentActivity implements
 	 * app update
 	 */
 	private void manageAppUpdate() {
-		MyApplication application = (MyApplication) getApplication();
-		UmengUpdateAgent.setUpdateOnlyWifi(application.isUpdate_wifi());
-//		UmengUpdateAgent.setUpdateOnlyWifi(false);
-		SharedPreferences preferences = application.getmPreference();
-		boolean isAutoUpdate = preferences.getBoolean(Preferences.AUTOUPDATE, true);
-//		Log.i(TAG, "isAutoUpdate is "+isAutoUpdate);
+		boolean isUpdateOnlyWifi = MyApplication.getInstance().getmPreference().getBoolean(Preferences.UPDATE_WIFI_ONLY, false);
+		UmengUpdateAgent.setUpdateOnlyWifi(isUpdateOnlyWifi);
+		boolean isAutoUpdate = MyApplication.getInstance().getmPreference().getBoolean(Preferences.AUTOUPDATE, true);
 		if (isAutoUpdate) {
 			UmengUpdateAgent.update(this);
 		}
@@ -346,7 +342,7 @@ public class Home extends SherlockFragmentActivity implements
 
 	private void exit() {
 		finish();
-		MyApplication.mImageLoader.getImageManager().clear();
+		ImageLoader.getInstance().clearMemoryCache();
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}
 

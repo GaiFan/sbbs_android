@@ -15,7 +15,7 @@ public abstract class BaseActivity extends SherlockActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		if (!MyApplication.isNightMode) {
+		if (!MyApplication.getInstance().isNightMode()) {
 			setTheme(com.actionbarsherlock.R.style.Theme_Sherlock_Light_ForceOverflow);
 		}else{
 			setTheme(com.actionbarsherlock.R.style.Theme_Sherlock_ForceOverflow);
@@ -31,10 +31,10 @@ public abstract class BaseActivity extends SherlockActivity {
 			getSupportActionBar().setHomeButtonEnabled(true);
 		}
 		MyApplication.getInstance();
-		isLogined = MyApplication.checkLogin();
+		isLogined = MyApplication.getInstance().checkLogin();
 		if (isLogined) {
 			Log.i(TAG, "login");
-			token = MyApplication.getInstance().getToken();
+			token = MyApplication.getInstance().getCurrentUser().getToken();
 			setup();
 		} else {
 			Log.i(TAG, "unlogin");

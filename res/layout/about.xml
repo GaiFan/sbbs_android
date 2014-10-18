@@ -18,7 +18,7 @@
 
             <TextView
                 android:id="@+id/version_title"
-                style="@style/LinkText.Bold.Big"
+                style="@style/LinkText.Big"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -37,7 +37,7 @@
             
             <TextView
                 android:id="@+id/sthanks_title"
-                style="@style/LinkText.Bold.Big"
+                style="@style/LinkText.Big"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -63,7 +63,7 @@
      
             <TextView
                 android:id="@+id/contact_title"
-                style="@style/LinkText.Bold.Big"
+                style="@style/LinkText.Big"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -92,7 +92,7 @@
 
             <TextView
                 android:id="@+id/about_link_title"
-                style="@style/LinkText.Bold.Big"
+                style="@style/LinkText.Big"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/devider_three"

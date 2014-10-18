@@ -17,6 +17,7 @@ import com.gfan.sbbs.bean.Mail;
 import com.gfan.sbbs.http.HttpException;
 import com.gfan.sbbs.othercomponent.BBSOperator;
 import com.gfan.sbbs.othercomponent.MyApplication;
+import com.gfan.sbbs.othercomponent.Preferences;
 import com.gfan.sbbs.task.GenericTask;
 import com.gfan.sbbs.task.TaskAdapter;
 import com.gfan.sbbs.task.TaskListener;
@@ -153,6 +154,29 @@ public class MailBody extends BaseActivity {
 		this.findViewById(R.id.post_att_label).setVisibility(View.GONE);
 //		this.findViewById(R.id.post_att_link).setVisibility(View.GONE);
 		this.findViewById(R.id.post_att).setVisibility(View.GONE);
+		String fontSize = MyApplication.getInstance().getmPreference().getString(Preferences.FONT_SIZE_ADJUST, "Normal");
+		if(fontSize.equals(Preferences.FONT_SIZE_LARGE)){
+			authorView.setTextAppearance(this, R.style.AuthorText_Large);
+			timeView.setTextAppearance(this, R.style.TimeText_Large);
+			titleView.setTextAppearance(this, R.style.TitleText_Large);
+			contentView.setTextAppearance(this, R.style.BodyText_Large);
+			quoterView.setTextAppearance(this, R.style.QuoteText_Large);
+			quoteView.setTextAppearance(this, R.style.QuoteText_Large);
+		}else if(fontSize.equals(Preferences.FONT_SIZE_SMALL)){
+			authorView.setTextAppearance(this, R.style.AuthorText_Small);
+			timeView.setTextAppearance(this, R.style.TimeText_Small);
+			titleView.setTextAppearance(this, R.style.TitleText_Small);
+			contentView.setTextAppearance(this, R.style.BodyText_Small);
+			quoterView.setTextAppearance(this, R.style.QuoteText_Small);
+			quoteView.setTextAppearance(this, R.style.QuoteText_Small);
+		}else{
+			authorView.setTextAppearance(this, R.style.AuthorText_Normal);
+			timeView.setTextAppearance(this, R.style.TimeText_Normal);
+			titleView.setTextAppearance(this, R.style.TitleText_Normal);
+			contentView.setTextAppearance(this, R.style.BodyText_Normal);
+			quoterView.setTextAppearance(this, R.style.QuoteText_Normal);
+			quoteView.setTextAppearance(this, R.style.QuoteText_Normal);
+		}
 	}
 
 	@Override

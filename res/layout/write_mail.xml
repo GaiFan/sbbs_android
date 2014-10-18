@@ -25,10 +25,9 @@
                     android:id="@+id/write_mail_to_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
                     android:text="@string/new_mail_to"
-                    android:textColor="@android:color/background_dark"
-                    android:textSize="15sp" />
+                    style="@style/AuthorText.Normal"
+                    />
 
                 <EditText
                     android:id="@+id/new_mail_to"
@@ -38,7 +37,7 @@
                     android:hint="@string/new_mail_to"
                     android:imeOptions="actionNext"
                     android:singleLine="true"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout

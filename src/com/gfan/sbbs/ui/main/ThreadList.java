@@ -186,13 +186,8 @@ public class ThreadList extends BaseActivity implements OnLoadMoreDataListener {
 		moreBtn = (TextView) moreView.findViewById(R.id.load_more_btn);
 		progressbar = (LinearLayout) moreView.findViewById(R.id.more_progress);
 		myListView.addFooterView(moreView);
-//		this.findViewById(R.id.re_devider).setVisibility(View.VISIBLE);
 		if (isLogined) {
 			baseUrl = baseUrl.concat("&token=" + token);
-//			qRView = this.findViewById(R.id.quick_reply);
-//			qRView.setVisibility(View.VISIBLE);
-//			qREditText = (EditText) qRView.findViewById(R.id.quick_reply_txt);
-//			qRBtn = (ImageView) qRView.findViewById(R.id.quick_reply_btn);
 		}
 		myAdapter = new TopReplyAdapter(this);
 		myListView.setAdapter(myAdapter);

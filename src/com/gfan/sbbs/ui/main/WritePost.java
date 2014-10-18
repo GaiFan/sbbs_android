@@ -55,6 +55,7 @@ public class WritePost extends BaseActivity {
 	private static final int MENU_ANONYMOUS = Menu.FIRST + 2;
 	private static final int REQUEST_ADD_ATTACHMENT = 0;
 	private static final String TAG = WritePost.class.getName();
+	private static final int REQUEST_FOR_LOGIN = 100;
 
 	private TaskListener doPostListener = new TaskAdapter() {
 
@@ -85,10 +86,14 @@ public class WritePost extends BaseActivity {
 
 	@Override
 	protected void processUnLogin() {
-		// TODO Auto-generated method stub
-
+		Toast.makeText(this, R.string.unlogin_notice, Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent(this,LoginActivity.class);
+		intent.putExtra(LoginActivity.START_LOGIN, new Bundle());
+		startActivityForResult(intent, REQUEST_FOR_LOGIN);
 	}
 
+
+	
 	@Override
 	protected void setup() {
 
@@ -387,6 +392,14 @@ public class WritePost extends BaseActivity {
 		if (requestCode == REQUEST_ADD_ATTACHMENT && resultCode == RESULT_OK) {
 			Log.i(TAG, "WritePost Activity starts from FileUploadActivity");
 			return;
+		}else if(requestCode == REQUEST_FOR_LOGIN && resultCode == RESULT_OK){
+			boolean login_ok = getIntent().getBooleanExtra(LoginActivity.LOGIN_OK, false);
+			if(login_ok){
+				Log.i(TAG, "login ok!");
+			}else{
+				finish();
+				Toast.makeText(this, R.string.unlogin_notice, Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 

@@ -129,6 +129,7 @@ public class HotFragment extends SherlockFragment implements
 	public void onResume() {
 		super.onResume();
 		MobclickAgent.onPageStart("HotFragment");
+		draw();
 	}
 
 	@Override
@@ -181,7 +182,7 @@ public class HotFragment extends SherlockFragment implements
 		hotListView.setAdapter(myAdapter);
 		hotUrl = SBBSConstants.HOTURL;
 		hotSectionUrl = SBBSConstants.HOT_SECTIONS;
-		if (MyApplication.checkLogin()) {
+		if (MyApplication.getInstance().checkLogin()) {
 			hotUrl = hotUrl.concat("?token=" + MyApplication.getInstance().getToken());
 			hotSectionUrl = hotSectionUrl.concat("?token="
 					+ MyApplication.getInstance().getToken());
@@ -230,7 +231,7 @@ public class HotFragment extends SherlockFragment implements
 			mRetrieveTask.execute(hotUrl);
 		} else {
 			String url;
-			if (MyApplication.checkLogin()) {
+			if (MyApplication.getInstance().checkLogin()) {
 				url = hotSectionUrl.concat("&section=" + type);
 			} else {
 				url = hotSectionUrl.concat("?section=" + type);

@@ -31,6 +31,8 @@ import com.gfan.sbbs.dao.topic.PostHelper;
 import com.gfan.sbbs.http.HttpException;
 import com.gfan.sbbs.othercomponent.BBSOperator;
 import com.gfan.sbbs.othercomponent.MyApplication;
+import com.gfan.sbbs.othercomponent.Preferences;
+import com.gfan.sbbs.othercomponent.SBBSConstants;
 import com.gfan.sbbs.task.GenericTask;
 import com.gfan.sbbs.task.TaskAdapter;
 import com.gfan.sbbs.task.TaskListener;
@@ -207,7 +209,7 @@ public class SinglePostActivity extends BaseActivity  {
 	 */
 	
 	private void initUrl(){
-		url = "http://bbs.seu.edu.cn/api/topic/" + boardID + "/" + id
+		url = SBBSConstants.BASE_API_URL + "/topic/" + boardID + "/" + id
 		+ ".json?limit=1";
 		if (isLogined()) {
 			url = url.concat("&token=" + token);
@@ -229,6 +231,30 @@ public class SinglePostActivity extends BaseActivity  {
 		myGridView = (MyGridView) this.findViewById(R.id.att_grid);
 		attAdapter = new AttachmentAdapter(this);
 		myGridView.setAdapter(attAdapter);
+		String fontSize = MyApplication.getInstance().getmPreference().getString(Preferences.FONT_SIZE_ADJUST, "Normal");
+		if(fontSize.equals(Preferences.FONT_SIZE_LARGE)){
+			postTitle.setTextAppearance(this, R.style.TitleText_Large);
+			textAuthor.setTextAppearance(this, R.style.AuthorText_Large);
+			textTime.setTextAppearance(this, R.style.TimeText_Large);
+			textContent.setTextAppearance(this, R.style.BodyText_Large);
+			textQuote.setTextAppearance(this, R.style.QuoteText_Large);
+			textQuoter.setTextAppearance(this, R.style.QuoteText_Large);
+		}else if(fontSize.equals(Preferences.FONT_SIZE_SMALL)){
+			postTitle.setTextAppearance(this, R.style.TitleText_Small);
+			textAuthor.setTextAppearance(this, R.style.AuthorText_Small);
+			textTime.setTextAppearance(this, R.style.TimeText_Small);
+			textContent.setTextAppearance(this, R.style.BodyText_Small);
+			textQuote.setTextAppearance(this, R.style.QuoteText_Small);
+			textQuoter.setTextAppearance(this, R.style.QuoteText_Small);
+		}else{
+			postTitle.setTextAppearance(this, R.style.TitleText_Normal);
+			textAuthor.setTextAppearance(this, R.style.AuthorText_Normal);
+			textTime.setTextAppearance(this, R.style.TimeText_Normal);
+			textContent.setTextAppearance(this, R.style.BodyText_Normal);
+			textQuote.setTextAppearance(this, R.style.QuoteText_Normal);
+			textQuoter.setTextAppearance(this, R.style.QuoteText_Normal);
+		}
+		
 	}
 
 	private void bindView() {
@@ -430,7 +456,7 @@ public class SinglePostActivity extends BaseActivity  {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (!MyApplication.isNightMode) {
+		if (!MyApplication.getInstance().isNightMode()) {
 
 			menu.add(Menu.NONE, MENU_SHARE, Menu.NONE, "share")
 					.setIcon(R.drawable.ic_menu_share_inverse)
@@ -470,7 +496,7 @@ public class SinglePostActivity extends BaseActivity  {
 			subMenu.add(Menu.NONE, MENU_EDIT, Menu.NONE, R.string.post_edit);
 			subMenu.add(Menu.NONE, MENU_COPY, Menu.NONE, R.string.post_copy);
 			MenuItem subMenuItem = subMenu.getItem();
-			if (MyApplication.isNightMode) {
+			if (MyApplication.getInstance().isNightMode()) {
 				subMenuItem.setIcon(R.drawable.ic_menu_more).setShowAsAction(
 						MenuItem.SHOW_AS_ACTION_IF_ROOM);
 			} else {

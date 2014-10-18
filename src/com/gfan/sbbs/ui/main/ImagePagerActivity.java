@@ -143,21 +143,21 @@ public class ImagePagerActivity extends BaseActivity{
 				public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
 					String message = "加载失败";
 					switch (failReason.getType()) {
-//						case IO_ERROR:
-//							message = "Input/Output error";
-//							break;
-//						case DECODING_ERROR:
-//							message = "Image can't be decoded";
-//							break;
-//						case NETWORK_DENIED:
-//							message = "Downloads are denied";
-//							break;
-//						case OUT_OF_MEMORY:
-//							message = "Out Of Memory error";
-//							break;
-//						case UNKNOWN:
-//							message = "Unknown error";
-//							break;
+						case IO_ERROR:
+							message = "Input/Output error";
+							break;
+						case DECODING_ERROR:
+							message = "Image can't be decoded";
+							break;
+						case NETWORK_DENIED:
+							message = "Downloads are denied";
+							break;
+						case OUT_OF_MEMORY:
+							message = "Out Of Memory error";
+							break;
+						case UNKNOWN:
+							message = "Unknown error";
+							break;
 					}
 					Toast.makeText(ImagePagerActivity.this, message, Toast.LENGTH_SHORT).show();
 

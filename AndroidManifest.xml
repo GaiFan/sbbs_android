@@ -120,10 +120,10 @@
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="" />
+            android:value="4f6d745752701534d900003a" />
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="Umeng_Channel" />
+            android:value="GFan" />
     </application>
 
 </manifest>

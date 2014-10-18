@@ -6,6 +6,7 @@ public class Preferences {
 	public static final String USER_TOKEN ="token";
 	public static final String REMEMBER_ME = "pref_remember_me";
 	public static final String AUTOLOGIN = "pref_autologin";
+	public static final String IS_LOGINED = "pref_is_logined";
 	public static final String FONT_SIZE_ADJUST = "pref_font_size_ajust";
 	
 	public static final String SELECT_PAGE = "pref_select_start_page";
@@ -29,6 +30,11 @@ public class Preferences {
 	public static final String HAS_DRAFT = "pref_has_draft";
 	public static final String DRAFT_REID = "pref_draft_reid";
 	public static final String DRAFT_BOARD = "pref_draft_board";
+	
+	public static final String FONT_SIZE_NORMAL = "Normal";
+	public static final String FONT_SIZE_LARGE = "Large";
+	public static final String FONT_SIZE_SMALL = "Small";
+	
 	
 	public static final String THREAD_LIST_TITLE_FONT_SIZE = "pref_thread_list_title_font_size";
 	public static final String THREAD_LIST_POPULARITY_FONT_SIZE	= "pref_thread_list_popularity_font_size";

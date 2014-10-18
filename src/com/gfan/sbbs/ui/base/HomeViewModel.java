@@ -49,7 +49,8 @@ public class HomeViewModel extends BaseViewModel {
 					@Override
 					public void run() {
 						pdialog.dismiss();
-						MyApplication.mPreference.edit().clear().commit();
+						MyApplication.getInstance().getmPreference().edit().clear().commit();
+						MyApplication.getInstance().setCurrentUser(null);
 						Intent intent = new Intent(activity,LoginActivity.class);
 						activity.startActivity(intent);
 						activity.finish();

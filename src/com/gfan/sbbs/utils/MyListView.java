@@ -130,7 +130,7 @@ public class MyListView extends ListView implements OnScrollListener {
 	}
 
 	private void onModeSettings(){
-		boolean isNightMode = MyApplication.isNightMode;
+		boolean isNightMode = MyApplication.getInstance().isNightMode();
 		if(isNightMode){
 			
 		}else{

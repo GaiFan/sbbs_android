@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.gfan.sbbs.bean.Mail;
 import com.gfan.sbbs.othercomponent.MyApplication;
+import com.gfan.sbbs.othercomponent.Preferences;
 import com.gfan.sbbs.ui.main.R;
 
 public class MailAdapter extends BaseAdapter {
@@ -28,6 +29,7 @@ public class MailAdapter extends BaseAdapter {
 	public MailAdapter(LayoutInflater mInflater){
 		this.mailList = new ArrayList<Mail>();
 		this.mInflater = mInflater;
+		this.context = MyApplication.getInstance().getActivity();
 	}
 	public void setList(List<Mail>list){
 		this.mailList = list;
@@ -80,6 +82,18 @@ public class MailAdapter extends BaseAdapter {
 			convertView.setBackgroundColor(0xffEEEEEE);
 //			holder.titleInfo.getPaint().setFakeBoldText(false);
 		}
+		String fontSize = MyApplication.getInstance().getmPreference().getString(Preferences.FONT_SIZE_ADJUST, "Normal");
+		if(fontSize.equals(Preferences.FONT_SIZE_NORMAL)){
+			holder.authorInfo.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.AuthorText_Normal);
+			holder.titleInfo.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.TitleText_Normal);
+		}else if(fontSize.equals(Preferences.FONT_SIZE_LARGE)){
+			holder.authorInfo.setTextAppearance(MyApplication.getInstance().getActivity(),R.style.AuthorText_Large);
+			holder.titleInfo.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.TitleText_Large);
+		}else{
+			holder.authorInfo.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.AuthorText_Small);
+			holder.titleInfo.setTextAppearance(MyApplication.getInstance().getActivity(), R.style.TitleText_Small);
+		}
+		
 		return convertView;
 	}
 

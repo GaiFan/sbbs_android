@@ -17,10 +17,8 @@ public class TopicDAO {
 	private static final String TAG = "TopicDAO";
 
 	private SQLiteOpenHelper mOpenHelper;
-	private Context mContext;
 	
 	public TopicDAO(Context context){
-		this.mContext = context;
 		mOpenHelper = SBBSDataBase.getInstance(context).getmDataBaseHelper();
 	}
 	

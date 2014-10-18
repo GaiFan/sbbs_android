@@ -9,7 +9,7 @@
         android:id="@+id/mail_authorinfo"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        style="@style/LinkText"
+        style="@style/AuthorText.Normal"
         />
     
     <TextView 
@@ -17,7 +17,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/background_dark"
-        style="@style/normalText"
+        style="@style/TitleText.Normal"
         />
 
 </LinearLayout>

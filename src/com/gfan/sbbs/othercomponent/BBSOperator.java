@@ -108,7 +108,7 @@ public class BBSOperator {
 		params.add(new BasicNameValuePair("title", topic.getTitle()));
 		params.add(new BasicNameValuePair("content", topic.getContent()));
 		params.add(new BasicNameValuePair("reid", reID));
-		/**TODO
+		/**
 		 * 增加是否匿名选项
 		 */
 		if(topic.isAnonymous()){			
@@ -137,6 +137,13 @@ public class BBSOperator {
 		return Topic.getTopic(getJsonSuccess(url, params));
 	}
 
+	/**
+	 * 
+	 * @param url
+	 * @param topic
+	 * @return
+	 * @throws HttpException
+	 */
 	public Topic doEdit(String url,Topic topic) throws HttpException{
 		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
 		params.add(new BasicNameValuePair("board", topic.getBoardName()));

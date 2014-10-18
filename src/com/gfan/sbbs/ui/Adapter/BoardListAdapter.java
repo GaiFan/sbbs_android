@@ -14,7 +14,6 @@ import com.gfan.sbbs.bean.Board;
 import com.gfan.sbbs.othercomponent.MyApplication;
 import com.gfan.sbbs.othercomponent.Preferences;
 import com.gfan.sbbs.ui.main.R;
-import com.gfan.sbbs.ui.utils.ActivityUtils;
 
 public class BoardListAdapter extends BaseAdapter {
 	private List<Board> boardList;
@@ -78,7 +77,7 @@ public class BoardListAdapter extends BaseAdapter {
 			holder.textView.setText("[版面]" + boardList.get(position).getTitle()
 					+ "(" + boardList.get(position).getId() + ")");
 		}
-		if (!MyApplication.isNightMode) {
+		if (!MyApplication.getInstance().isNightMode()) {
 			if (boardList.get(position).isHasUnread()) {
 				convertView.setBackgroundColor(0xffF6F6F6);
 				// holder.textView.getPaint().setFakeBoldText(true);

@@ -12,7 +12,9 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="pref_autologin"
-            android:title="@string/pref_autolgoin" />
+            android:title="@string/pref_autolgoin" 
+            android:dependency="pref_remember_me"
+            />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="pref_update_settings"

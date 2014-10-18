@@ -33,7 +33,7 @@ import com.gfan.sbbs.utils.MyListView.OnLoadMoreDataListener;
 import com.umeng.analytics.MobclickAgent;
 
 /**
- * ���ذ��������б�
+ * 版面界面
  * 
  * @author Nine
  * 
@@ -199,6 +199,7 @@ public class TopicList extends BaseActivity implements OnLoadMoreDataListener {
 	protected void onResume() {
 		super.onResume();
 		MobclickAgent.onResume(this);
+		myAdapter.refresh();
 	}
 
 	@Override

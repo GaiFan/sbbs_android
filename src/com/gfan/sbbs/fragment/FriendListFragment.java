@@ -107,7 +107,7 @@ public class FriendListFragment extends SherlockFragment implements
 		setRetainInstance(true);
 		Log.i(TAG, "OnCreate");
 
-		isLogined = MyApplication.checkLogin();
+		isLogined = MyApplication.getInstance().checkLogin();
 		friendsUrl = SBBSConstants.FRIENDS_URL;
 		if (isLogined) {
 			friendsUrl = friendsUrl

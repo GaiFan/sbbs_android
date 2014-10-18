@@ -111,7 +111,7 @@ public class ViewProfileActivity extends BaseActivity {
 		try {
 			userID = getIntent().getExtras().getString("userID");
 		} catch (NullPointerException e) {
-			userID = MyApplication.userName;
+			userID = MyApplication.getInstance().getCurrentUser().getId();
 		}
 		userName = (TextView) this.findViewById(R.id.profile_userid);
 		nickName = (TextView) this.findViewById(R.id.profile_user_nickname);

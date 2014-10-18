@@ -37,7 +37,8 @@
                     android:hint="@string/new_post_title"
                     android:imeOptions="actionNext"
                     android:singleLine="true"
-                    android:textSize="15sp" />
+                    style="@style/TitleText.Normal"
+                    />
             </LinearLayout>
 <!-- 
             <RelativeLayout
@@ -86,8 +87,8 @@
                 android:gravity="top"
                 android:hint="@string/new_post_content"
                 android:imeOptions="actionDone"
-                android:paddingBottom="2dp"
-                android:paddingTop="2dp" />
+                style="@style/BodyText.Normal"
+                />
         </LinearLayout>
     </ScrollView>
 

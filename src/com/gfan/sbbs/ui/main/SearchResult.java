@@ -173,7 +173,7 @@ public class SearchResult extends BaseActivity implements OnPageChangeListener ,
 		searchTopicUrl = SBBSConstants.BASE_API_URL+"/search/topics.json?keys="+keyWord;
 		searchBoardUrl = SBBSConstants.BASE_API_URL+"/search/boards.json?name="+keyWord;
 		
-		if(MyApplication.getInstance().isLogined()){
+		if(MyApplication.getInstance().checkLogin()){
 			searchBoardUrl += "&token="+ MyApplication.getInstance().getToken();
 			searchTopicUrl += "&token="+ MyApplication.getInstance().getToken();
 		}

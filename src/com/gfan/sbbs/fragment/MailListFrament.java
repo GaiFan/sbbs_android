@@ -39,6 +39,7 @@ import com.gfan.sbbs.task2.TaskResult;
 import com.gfan.sbbs.ui.Adapter.MailAdapter;
 import com.gfan.sbbs.ui.base.BaseViewModel;
 import com.gfan.sbbs.ui.base.HomeViewModel;
+import com.gfan.sbbs.ui.main.LoginActivity;
 import com.gfan.sbbs.ui.main.R;
 import com.gfan.sbbs.ui.main.WriteMail;
 import com.gfan.sbbs.utils.MyListView;
@@ -61,8 +62,7 @@ public class MailListFrament extends SherlockFragment implements
 	private TextView moreBtn;
 	private LinearLayout progressbar;
 
-	private boolean isFirstLoad = true, forceLoad = false, isLoaded = false,
-			isLogined;
+	private boolean isFirstLoad = true, forceLoad = false, isLoaded = false;
 	private String mailUrl, errorCause;
 	private int start = 0, inStart = 0, sendStart = 0, trashStart = 0,
 			headPosition;
@@ -74,9 +74,10 @@ public class MailListFrament extends SherlockFragment implements
 	private static final int SENDBOX = 2;
 	private static final int DELETEBOX = 3;
 	private static final int MENU_NEW = 10;
+	private static final int REQUEST_FOR_LOGIN = 100;
 
-//	private static final int OPENREQUESTCODE = 0;
-//	private static final int DELMAIL = 1;
+	// private static final int OPENREQUESTCODE = 0;
+	// private static final int DELMAIL = 1;
 
 	private static final String TAG = "MailListFragment";
 
@@ -126,8 +127,6 @@ public class MailListFrament extends SherlockFragment implements
 		Log.i(TAG, "OnCreate");
 	}
 
-	
-	
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -139,8 +138,6 @@ public class MailListFrament extends SherlockFragment implements
 		super.onResume();
 		MobclickAgent.onPageStart("MailListFragment");
 	}
-
-
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -159,8 +156,10 @@ public class MailListFrament extends SherlockFragment implements
 				&& mHomeViewModel.getCurrentTab().equals(
 						ActivityFragmentTargets.TAB_MAIL)) {
 			Log.i(TAG, "MailListFragment doretrieve");
-			if (isLogined) {
+			if (isLogined()) {
 				doRetrieve();
+			} else {
+				processUnLogin();
 			}
 		}
 		Log.i(TAG, "MailListFragment -->onActivityCreated");
@@ -185,8 +184,7 @@ public class MailListFrament extends SherlockFragment implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int position = item.getItemId();
 		if (position == MENU_NEW) {
-			Intent intent = new Intent(getSherlockActivity(),WriteMail.class);
-//			intent.setClassName("com.yuchao.ui", "com.yuchao.ui.WriteMail");
+			Intent intent = new Intent(getSherlockActivity(), WriteMail.class);
 			startActivity(intent);
 			return true;
 		} else if (position > 0 && position < 4) {
@@ -207,7 +205,8 @@ public class MailListFrament extends SherlockFragment implements
 				.setIcon(R.drawable.ic_compose_inverse)
 				.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-		SubMenu subMenu = menu.addSubMenu(1, 0, Menu.NONE, R.string.mail_box_switch);
+		SubMenu subMenu = menu.addSubMenu(1, 0, Menu.NONE,
+				R.string.mail_box_switch);
 		subMenu.add(0, MAILBOX, 0, R.string.in_box);
 		subMenu.add(0, SENDBOX, 0, R.string.send_box);
 		subMenu.add(0, DELETEBOX, 0, R.string.trash_box);
@@ -240,10 +239,9 @@ public class MailListFrament extends SherlockFragment implements
 	}
 
 	private void initArgs() {
-		mailUrl = SBBSConstants.MAILURL;
-		isLogined = MyApplication.checkLogin();
-		if (isLogined) {
-			mailUrl = mailUrl.concat("?token=" + MyApplication.getInstance().getToken());
+		if (isLogined()) {
+			mailUrl = SBBSConstants.MAILURL.concat("?token="
+					+ MyApplication.getInstance().getToken());
 		}
 		mailListView = (MyListView) mLayout.findViewById(R.id.my_list);
 		myAdapter = new MailAdapter(mInflater);
@@ -335,8 +333,9 @@ public class MailListFrament extends SherlockFragment implements
 
 	private void changeBox(int box) {
 		if (box == nowBox) {
-			Toast.makeText(getSherlockActivity(), R.string.mail_current_box_notice,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(getSherlockActivity(),
+					R.string.mail_current_box_notice, Toast.LENGTH_SHORT)
+					.show();
 			return;
 		}
 		List<Mail> nowList = getMailList(nowBox);
@@ -354,9 +353,9 @@ public class MailListFrament extends SherlockFragment implements
 			draw();
 		}
 	}
-	
-	private void setActivityTitle(int box){
-		switch(box){
+
+	private void setActivityTitle(int box) {
+		switch (box) {
 		case MAILBOX:
 			getSherlockActivity().setTitle(R.string.menu_mail);
 			break;
@@ -368,7 +367,7 @@ public class MailListFrament extends SherlockFragment implements
 			break;
 		default:
 			getSherlockActivity().setTitle(R.string.menu_mail);
-				
+
 		}
 	}
 
@@ -421,9 +420,27 @@ public class MailListFrament extends SherlockFragment implements
 
 	private void processUnLogin() {
 
-		Toast.makeText(getSherlockActivity(), R.string.login_indicate,
-				Toast.LENGTH_SHORT).show();
-		return;
+		if (null != getActivity()) {
+			Toast.makeText(getActivity(), R.string.unlogin_notice,
+					Toast.LENGTH_SHORT).show();
+		}
+		Intent intent = new Intent(MyApplication.getInstance().getActivity(),
+				LoginActivity.class);
+		intent.putExtra(LoginActivity.START_LOGIN, new Bundle());
+		startActivityForResult(intent, REQUEST_FOR_LOGIN);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (null == data)
+			return;
+		boolean login_ok = data.getBooleanExtra(LoginActivity.LOGIN_OK, false);
+		if (login_ok) {
+			mailUrl = SBBSConstants.MAILURL.concat("?token="
+					+ MyApplication.getInstance().getCurrentUser().getToken());
+			doRetrieve();
+		}
 	}
 
 	@Override
@@ -483,7 +500,7 @@ public class MailListFrament extends SherlockFragment implements
 	public void onViewModelChange(BaseViewModel viewModel,
 			String changedPropertyName, Object... params) {
 		if (HomeViewModel.CURRENTTAB_PROPERTY_NAME.equals(changedPropertyName)) {
-			if (isLogined) {
+			if (isLogined()) {
 				if (!isLoaded
 						&& mHomeViewModel.getCurrentTab().equals(
 								ActivityFragmentTargets.TAB_MAIL)) {
@@ -494,13 +511,18 @@ public class MailListFrament extends SherlockFragment implements
 								ActivityFragmentTargets.TAB_MAIL)) {
 					draw();
 				}
+			} else if (mHomeViewModel.getCurrentTab().equals(
+					ActivityFragmentTargets.TAB_MAIL)) {
+				processUnLogin();
 			}
-		} else {
-			processUnLogin();
 		}
 
 	}
 
+	private boolean isLogined(){
+		return MyApplication.getInstance().checkLogin();
+	}
+	
 	@Override
 	public void onLoadMoreData() {
 		lastItem = mailListView.getLastItemIndex();

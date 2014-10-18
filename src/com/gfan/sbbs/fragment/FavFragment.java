@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ import com.gfan.sbbs.task2.TaskResult;
 import com.gfan.sbbs.ui.Adapter.BoardListAdapter;
 import com.gfan.sbbs.ui.base.BaseViewModel;
 import com.gfan.sbbs.ui.base.HomeViewModel;
+import com.gfan.sbbs.ui.main.LoginActivity;
 import com.gfan.sbbs.ui.main.R;
 import com.gfan.sbbs.ui.main.TopicList;
 import com.gfan.sbbs.utils.MyListView;
@@ -42,11 +44,11 @@ public class FavFragment extends SherlockFragment implements
 
 	private MyListView favListView;
 	private List<Board> favList;
-	private boolean isLoaded = false, isLogined;
+	private boolean isLoaded = false;
 	private boolean onRoot = true;
 	private String favUrl, errorCause;
 	private BoardListAdapter myAdapter;
-	private GenericTask  mRetrieveTask;
+	private GenericTask mRetrieveTask;
 	private HomeViewModel mHomeViewModel;
 	private OnOpenActivityFragmentListener mOnOpenActivityListener;
 
@@ -55,6 +57,7 @@ public class FavFragment extends SherlockFragment implements
 	private TextView mUpFolder;
 
 	private static final String TAG = "FavFragment";
+	private static final int REQUEST_FOR_LOGIN = 100;
 
 	private TaskListener mRetrieveTaskListener = new TaskAdapter() {
 		ProgressDialog pdialog;
@@ -91,21 +94,18 @@ public class FavFragment extends SherlockFragment implements
 		setRetainInstance(true);
 	}
 
-	
 	@Override
 	public void onResume() {
 		super.onResume();
 		MobclickAgent.onPageStart("FavFragment");
 		myAdapter.refresh();
 	}
-	
 
 	@Override
 	public void onPause() {
 		super.onPause();
 		MobclickAgent.onPageEnd("FavFragment");
 	}
-
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -122,12 +122,10 @@ public class FavFragment extends SherlockFragment implements
 						.getCurrentTab())) {
 			getSherlockActivity().getSupportActionBar().setNavigationMode(
 					ActionBar.NAVIGATION_MODE_STANDARD);
-			
-			if (isLogined) {
+
+			if (isLogined()) {
 				Log.i(TAG, "FavFragment do retrieve");
 				doRetrieve();
-			} else {
-				processUnlogin();
 			}
 		}
 	}
@@ -159,11 +157,9 @@ public class FavFragment extends SherlockFragment implements
 	}
 
 	private void initArgs() {
-		isLogined = MyApplication.checkLogin();
-		Log.i(TAG, "isLogined is " + isLogined);
-		favUrl = SBBSConstants.FAVURL;
-		if (isLogined) {
-			favUrl = favUrl.concat("?token=" + MyApplication.getInstance().getToken());
+		if (isLogined()) {
+			favUrl = SBBSConstants.FAVURL.concat("?token="
+					+ MyApplication.getInstance().getToken());
 		}
 		favListView = (MyListView) mLayout.findViewById(R.id.my_list);
 		mToUpperFolder = mInflater.inflate(R.layout.fav_item, null);
@@ -196,7 +192,8 @@ public class FavFragment extends SherlockFragment implements
 						if (board.isDirectory()) {
 							List<Board> list = board.getChildBoards();
 							if (null == list || list.size() == 0) {
-								Toast.makeText(getSherlockActivity(), R.string.fav_empty_dir,
+								Toast.makeText(getSherlockActivity(),
+										R.string.fav_empty_dir,
 										Toast.LENGTH_SHORT).show();
 								return;
 							}
@@ -277,9 +274,27 @@ public class FavFragment extends SherlockFragment implements
 	}
 
 	private void processUnlogin() {
-		//TODO sometimes(I don't know when) getSherlockActivity() returns null
+		// TODO a prompt dialog if needed
 		if (null != getActivity()) {
-			Toast.makeText(getActivity(), R.string.unlogin_notice, Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), R.string.unlogin_notice,
+					Toast.LENGTH_SHORT).show();
+		}
+		Intent intent = new Intent(MyApplication.getInstance().getActivity(),
+				LoginActivity.class);
+		intent.putExtra(LoginActivity.START_LOGIN, new Bundle());
+		startActivityForResult(intent, REQUEST_FOR_LOGIN);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (null == data)
+			return;
+		boolean login_ok = data.getBooleanExtra(LoginActivity.LOGIN_OK, false);
+		if (login_ok) {
+			favUrl = SBBSConstants.FAVURL.concat("?token="
+					+ MyApplication.getInstance().getToken());
+			doRetrieve();
 		}
 	}
 
@@ -314,22 +329,26 @@ public class FavFragment extends SherlockFragment implements
 	@Override
 	public void onViewModelChange(BaseViewModel viewModel,
 			String changedPropertyName, Object... params) {
-
-		if (!isLogined) {
-			processUnlogin();
-			return;
-		}
 		if (HomeViewModel.CURRENTTAB_PROPERTY_NAME.equals(changedPropertyName)) {
-			if (!isLoaded
-					&& mHomeViewModel.getCurrentTab().equals(
-							ActivityFragmentTargets.TAB_FAV)) {
-				doRetrieve();
-			} else if (isLoaded
-					&& mHomeViewModel.getCurrentTab().equals(
-							ActivityFragmentTargets.TAB_FAV)) {
-				draw();
+			if (isLogined()) {
+				if (!isLoaded
+						&& mHomeViewModel.getCurrentTab().equals(
+								ActivityFragmentTargets.TAB_FAV)) {
+					doRetrieve();
+				} else if (isLoaded
+						&& mHomeViewModel.getCurrentTab().equals(
+								ActivityFragmentTargets.TAB_FAV)) {
+					draw();
+				}
+			}else if (mHomeViewModel.getCurrentTab().equals(
+					ActivityFragmentTargets.TAB_FAV)) {
+				processUnlogin();
 			}
-		}
+		} 
 	}
 
+	private boolean isLogined(){
+		return MyApplication.getInstance().checkLogin();
+	}
+	
 }

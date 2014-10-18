@@ -8,6 +8,7 @@ import org.xmlpull.v1.XmlPullParser;
 import android.content.res.XmlResourceParser;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ public class MenuFragment extends ListFragment {
 	private HomeViewModel mHomeViewModel;
 //	private MyApplication application;
 
+	
 	private static final String TAG = "MenuFragment";
 
 	@Override
@@ -32,18 +34,19 @@ public class MenuFragment extends ListFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		getListView().setCacheColorHint(0);
-		View headerView = LayoutInflater.from(MyApplication.mContext).inflate(
+		View headerView = LayoutInflater.from(MyApplication.getInstance().getActivity()).inflate(
 				R.layout.menu_item, null);
 		headerView.setId(R.id.current_user);
 		String currentUser = "guest";
-		if (MyApplication.checkLogin()) {
-			currentUser = MyApplication.userName;
+		if (MyApplication.getInstance().checkLogin()) {
+			currentUser = MyApplication.getInstance().getCurrentUser().getId();
 		}
 		((TextView) headerView.findViewById(R.id.rbm_item_text))
 				.setText("当前用户:" + currentUser);
 		headerView.findViewById(R.id.rbm_item_icon).setVisibility(View.GONE);
 		getListView().addHeaderView(headerView);
 		getListView().setBackgroundResource(R.drawable.menu_bg);
+		getListView().setPadding(0,0,0,0);
 		parseXml(R.menu.ribbon_menu);
 		myAdapter = new MenuItemAdapter(getActivity());
 		mHomeViewModel = MyApplication.mHomeViewModel;
