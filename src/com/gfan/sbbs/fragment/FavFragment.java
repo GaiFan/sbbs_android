@@ -279,24 +279,24 @@ public class FavFragment extends SherlockFragment implements
 			Toast.makeText(getActivity(), R.string.unlogin_notice,
 					Toast.LENGTH_SHORT).show();
 		}
-		Intent intent = new Intent(MyApplication.getInstance().getActivity(),
-				LoginActivity.class);
-		intent.putExtra(LoginActivity.START_LOGIN, new Bundle());
-		startActivityForResult(intent, REQUEST_FOR_LOGIN);
+//		Intent intent = new Intent(MyApplication.getInstance().getActivity(),
+//				LoginActivity.class);
+//		intent.putExtra(LoginActivity.START_LOGIN, new Bundle());
+//		startActivityForResult(intent, REQUEST_FOR_LOGIN);
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (null == data)
-			return;
-		boolean login_ok = data.getBooleanExtra(LoginActivity.LOGIN_OK, false);
-		if (login_ok) {
-			favUrl = SBBSConstants.FAVURL.concat("?token="
-					+ MyApplication.getInstance().getToken());
-			doRetrieve();
-		}
-	}
+//	@Override
+//	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//		super.onActivityResult(requestCode, resultCode, data);
+//		if (null == data)
+//			return;
+//		boolean login_ok = data.getBooleanExtra(LoginActivity.LOGIN_OK, false);
+//		if (login_ok) {
+//			favUrl = SBBSConstants.FAVURL.concat("?token="
+//					+ MyApplication.getInstance().getToken());
+//			doRetrieve();
+//		}
+//	}
 
 	@Override
 	public void onDestroy() {

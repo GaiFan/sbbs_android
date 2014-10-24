@@ -78,10 +78,10 @@ public class TopReplyAdapter extends BaseAdapter {
 					.findViewById(R.id.list_reply_text_quote);
 			holder.txt_time = (TextView) convertView
 					.findViewById(R.id.list_reply_text_time);
-//			holder.txt_att = (TextView) convertView
-//					.findViewById(R.id.list_reply_att_link);
-//			holder.txt_att_label = (TextView) convertView
-//					.findViewById(R.id.list_reply_att_label);
+			// holder.txt_att = (TextView) convertView
+			// .findViewById(R.id.list_reply_att_link);
+			// holder.txt_att_label = (TextView) convertView
+			// .findViewById(R.id.list_reply_att_label);
 			holder.myGridView = (MyGridView) convertView
 					.findViewById(R.id.list_att_grid);
 			convertView.setTag(holder);
@@ -101,80 +101,102 @@ public class TopReplyAdapter extends BaseAdapter {
 		if (null != topic.getQuoter()) {
 			holder.txt_quoter.setVisibility(View.VISIBLE);
 			holder.txt_quoter.setText("在 " + topic.getQuoter() + " 的大作中提到：");
-			holder.txt_quote.setText(topic.getQuote());
+			if (null != topic.getQuote()) {
+				holder.txt_quote.setText(topic.getQuote());
+			}
 		} else {
 			holder.txt_quoter.setVisibility(View.GONE);
 			holder.txt_quote.setVisibility(View.GONE);
 		}
-		
-		holder.txt_time.setText(topic.getTime());
-//
-//		ImageLoader imageLoader = ImageLoader.getInstance();
-//		DisplayImageOptions options = new DisplayImageOptions.Builder()
-//				.showImageOnLoading(R.drawable.user_default_photo)
-//				.cacheInMemory(true).cacheOnDisc(true).considerExifParams(true)
-//				.bitmapConfig(Bitmap.Config.RGB_565).build();
 
-//		if (topic.isHasAtt()) {
-//			holder.txt_att.setVisibility(View.VISIBLE);
-//			holder.txt_att_label.setVisibility(View.VISIBLE);
-//			StringBuffer sb = new StringBuffer();
-//			List<Attachment> attList = topic.getAttList();
-//			for (int i = 0, len = attList.size(); i < len; i++) {
-//				Attachment att = attList.get(i);
-//				 sb.append("<a href='").append(att.getUrl()).append("'>");
-//				 sb.append(att.getFileName()).append("</a><br/><br/>");
-//
-//			}
-//			holder.txt_att.setText(Html.fromHtml(sb.toString()));
-//			holder.txt_att.setMovementMethod(LinkMovementMethod.getInstance());
-//		} else {
-//			holder.txt_att.setVisibility(View.GONE);
-//			holder.txt_att_label.setVisibility(View.GONE);
-//		}
-		if(topic.isHasAtt()){
+		holder.txt_time.setText(topic.getTime());
+		//
+		// ImageLoader imageLoader = ImageLoader.getInstance();
+		// DisplayImageOptions options = new DisplayImageOptions.Builder()
+		// .showImageOnLoading(R.drawable.user_default_photo)
+		// .cacheInMemory(true).cacheOnDisc(true).considerExifParams(true)
+		// .bitmapConfig(Bitmap.Config.RGB_565).build();
+
+		// if (topic.isHasAtt()) {
+		// holder.txt_att.setVisibility(View.VISIBLE);
+		// holder.txt_att_label.setVisibility(View.VISIBLE);
+		// StringBuffer sb = new StringBuffer();
+		// List<Attachment> attList = topic.getAttList();
+		// for (int i = 0, len = attList.size(); i < len; i++) {
+		// Attachment att = attList.get(i);
+		// sb.append("<a href='").append(att.getUrl()).append("'>");
+		// sb.append(att.getFileName()).append("</a><br/><br/>");
+		//
+		// }
+		// holder.txt_att.setText(Html.fromHtml(sb.toString()));
+		// holder.txt_att.setMovementMethod(LinkMovementMethod.getInstance());
+		// } else {
+		// holder.txt_att.setVisibility(View.GONE);
+		// holder.txt_att_label.setVisibility(View.GONE);
+		// }
+		if (topic.isHasAtt()) {
 			AttachmentAdapter attAdapter = new AttachmentAdapter(context);
 			holder.myGridView.setAdapter(attAdapter);
 			attAdapter.refresh(topic.getAttList());
-			if(attAdapter.getCount() <3){
+			if (attAdapter.getCount() < 3) {
 				holder.myGridView.setNumColumns(attAdapter.getCount());
 			}
-			holder.myGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			holder.myGridView
+					.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int position, long id) {
-					Intent intent = new Intent();
-					Bundle bundle = new Bundle();
-					bundle.putSerializable(PostHelper.EXTRA_ATT_LIST, (Serializable) topic.getAttList());
-					bundle.putInt(PostHelper.EXTRA_POSITION, position);
-					intent.putExtras(bundle);
-					intent.setClass(context, ImagePagerActivity.class);
-					MyApplication.getInstance().getActivity().startActivity(intent);
-					
-				}
-			});
-		}else{
-			holder.myGridView.setVisibility(View.INVISIBLE);
+						@Override
+						public void onItemClick(AdapterView<?> arg0, View arg1,
+								int position, long id) {
+							Intent intent = new Intent();
+							Bundle bundle = new Bundle();
+							bundle.putSerializable(PostHelper.EXTRA_ATT_LIST,
+									(Serializable) topic.getAttList());
+							bundle.putInt(PostHelper.EXTRA_POSITION, position);
+							intent.putExtras(bundle);
+							intent.setClass(context, ImagePagerActivity.class);
+							MyApplication.getInstance().getActivity()
+									.startActivity(intent);
+
+						}
+					});
+			/**
+			 * need to set myGridView visible
+			 */
+			holder.myGridView.setVisibility(View.VISIBLE);
+		} else {
+			holder.myGridView.setVisibility(View.GONE);
 		}
-		String fontSize = MyApplication.getInstance().getmPreference().getString(Preferences.FONT_SIZE_ADJUST, "Normal");
-		if(fontSize.equals(Preferences.FONT_SIZE_LARGE)){
-			holder.txt_author.setTextAppearance(context, R.style.AuthorText_Large);
-			holder.txt_content.setTextAppearance(context, R.style.BodyText_Large);
-			holder.txt_quote.setTextAppearance(context, R.style.QuoteText_Large);
-			holder.txt_quoter.setTextAppearance(context, R.style.QuoteText_Large);
+		String fontSize = MyApplication.getInstance().getmPreference()
+				.getString(Preferences.FONT_SIZE_ADJUST, "Normal");
+		if (fontSize.equals(Preferences.FONT_SIZE_LARGE)) {
+			holder.txt_author.setTextAppearance(context,
+					R.style.AuthorText_Large);
+			holder.txt_content.setTextAppearance(context,
+					R.style.BodyText_Large);
+			holder.txt_quote
+					.setTextAppearance(context, R.style.QuoteText_Large);
+			holder.txt_quoter.setTextAppearance(context,
+					R.style.QuoteText_Large);
 			holder.txt_time.setTextAppearance(context, R.style.TimeText_Large);
-		}else if(fontSize.equals(Preferences.FONT_SIZE_SMALL)){
-			holder.txt_author.setTextAppearance(context, R.style.AuthorText_Small);
-			holder.txt_content.setTextAppearance(context, R.style.BodyText_Small);
-			holder.txt_quote.setTextAppearance(context, R.style.QuoteText_Small);
-			holder.txt_quoter.setTextAppearance(context, R.style.QuoteText_Small);
+		} else if (fontSize.equals(Preferences.FONT_SIZE_SMALL)) {
+			holder.txt_author.setTextAppearance(context,
+					R.style.AuthorText_Small);
+			holder.txt_content.setTextAppearance(context,
+					R.style.BodyText_Small);
+			holder.txt_quote
+					.setTextAppearance(context, R.style.QuoteText_Small);
+			holder.txt_quoter.setTextAppearance(context,
+					R.style.QuoteText_Small);
 			holder.txt_time.setTextAppearance(context, R.style.TimeText_Small);
-		}else{
-			holder.txt_author.setTextAppearance(context, R.style.AuthorText_Normal);
-			holder.txt_content.setTextAppearance(context, R.style.BodyText_Normal);
-			holder.txt_quote.setTextAppearance(context, R.style.QuoteText_Normal);
-			holder.txt_quoter.setTextAppearance(context, R.style.QuoteText_Normal);
+		} else {
+			holder.txt_author.setTextAppearance(context,
+					R.style.AuthorText_Normal);
+			holder.txt_content.setTextAppearance(context,
+					R.style.BodyText_Normal);
+			holder.txt_quote.setTextAppearance(context,
+					R.style.QuoteText_Normal);
+			holder.txt_quoter.setTextAppearance(context,
+					R.style.QuoteText_Normal);
 			holder.txt_time.setTextAppearance(context, R.style.TimeText_Normal);
 		}
 		return convertView;
@@ -193,8 +215,8 @@ public class TopReplyAdapter extends BaseAdapter {
 		TextView txt_time;
 		TextView txt_quoter;
 		TextView txt_quote;
-//		TextView txt_att;
-//		TextView txt_att_label;
+		// TextView txt_att;
+		// TextView txt_att_label;
 		String userInfo;
 		String content;
 		MyGridView myGridView;

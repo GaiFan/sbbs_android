@@ -1,14 +1,21 @@
 package com.gfan.sbbs.ui.main;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -18,6 +25,7 @@ import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.ActionBarSherlock;
 import com.actionbarsherlock.view.ActionMode;
@@ -130,7 +138,7 @@ public class FileUploadActivity extends BaseActivity implements OnItemClickListe
 	}
 	
 	private String getPhotoFileName(Date date) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddKms");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddKms",Locale.CHINESE);
 		return dateFormat.format(date) + ".jpg";
 	}
 
@@ -139,41 +147,66 @@ public class FileUploadActivity extends BaseActivity implements OnItemClickListe
 	 * @param url
 	 */
 	
-	private void compressImages(String url){
+	private String compressImages(String url){
 		if(url.startsWith("file")){
 			url = url.substring(7);
 		}
-		ImageUtils.compressImages(url, SBBSConstants.IMAGE_QUALITY, this);
+		return ImageUtils.compressImages(url, SBBSConstants.IMAGE_QUALITY, this);
 	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		//TODO
-		if(null == data){
-			return;
-		}
+		
+		String photoDir = "";
 		if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+//			Bitmap bitmap = null;
+//			if(null != data.getData()){
+//				mImageUri = data.getData();
+//				photoDir = mImageUri.getPath();
+//			}else{
+//				bitmap = (Bitmap) data.getExtras().get("data");
+//				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//				try {
+//					File file = new File(StringUtils.getCacheFilePath(),getPhotoFileName(new Date()));
+//					BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+//					bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//					bos.write(baos.toByteArray(), 0, 1024);
+//					bos.flush();
+//					bos.close();
+//					photoDir = file.getPath();
+//				} catch (FileNotFoundException e) {
+//					e.printStackTrace();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//				if(null!= bitmap && !bitmap.isRecycled()){
+//					bitmap.recycle();
+//					bitmap = null;
+//				}
+//			}
+//			Log.i(TAG, "photo path is "+photoDir);
 			Intent intent = new Intent(this, WritePost.class);
 			addToFileList(intent, mImageUri);
 
 		} else if (requestCode == REQUEST_PHOTO_LIBRARY
 				&& resultCode == RESULT_OK) {
-			mImageUri = data.getData();
+			if(null != data.getData()){
+				mImageUri = data.getData();
+			}else{
+				Log.e(TAG, "data.getData==null");
+			}
 			Intent intent = new Intent(this, WritePost.class);
 			addToFileList(intent, mImageUri);
 		}
 	}
 	
 	private void addToFileList(Intent intent, Uri uri) {
-//		File mFile = null;
+		Log.i(TAG, "scheme is "+mImageUri.getScheme());
 		Attachment att = new Attachment();
 		if (uri.getScheme().equals("content")) {// stored on the sdcard
-//			mFile = new File(getRealPathFromURI(uri));
 			att.setUrl(getRealPathFromURI(uri));
 		} else {
-//			mFile = new File(mImageUri.getPath());
-//			Log.i(TAG, mFile.getAbsolutePath());
 			att.setUrl("file://"+uri.getPath());
 			att.setFileName(mImageFile.getName());
 		}
@@ -181,12 +214,14 @@ public class FileUploadActivity extends BaseActivity implements OnItemClickListe
 		 * parse file like this
 		 * "/mnt/sdcard/Universal Image Loader @#&=+-_.,!()~'%20.png"
 		 */
-		boolean flag = FileUtils.getInstance().addToAttUrl(att.getUrl());
-		if(flag){
-			fileList.add(att);
-			Log.d(TAG, "before compress,image Url is "+att.getUrl());
-			compressImages(att.getUrl());
-		}
+
+		/**TODO
+		 * check if the photo need to compress
+		 */
+		String tempUrl = compressImages(att.getUrl());
+		att.setUrl(tempUrl);
+		FileUtils.getInstance().addToAttUrl(att.getUrl());
+		fileList.add(att);
 		refresh(fileList);
 	}
 	

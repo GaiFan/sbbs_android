@@ -330,6 +330,7 @@ public class ThreadList extends BaseActivity implements OnLoadMoreDataListener {
 		myAdapter.refresh(threadList);
 	}
 
+	@SuppressWarnings("unused")
 	private void goTop() {
 		myListView.setSelection(headPosition);
 	}
@@ -458,7 +459,10 @@ public class ThreadList extends BaseActivity implements OnLoadMoreDataListener {
 		if(result == TaskResult.OK){
 			isFirstLoad = false;
 			draw();
-			goTop();
+			/**
+			 * 根据反馈，刷新数据完成后不再进行处理
+			 */
+//			goTop();
 		}
 	}
 

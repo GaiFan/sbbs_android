@@ -16,6 +16,7 @@ import com.gfan.sbbs.bean.Attachment;
 import com.gfan.sbbs.dao.topic.PostHelper;
 import com.gfan.sbbs.ui.Abstract.BaseActivity;
 import com.gfan.sbbs.ui.base.TouchImageView;
+import com.gfan.sbbs.utils.ExtendedViewPager;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -23,7 +24,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 
 public class ImagePagerActivity extends BaseActivity{
-	private ViewPager pager;
+	private ExtendedViewPager pager;
 	private ImageLoader imageLoader;
 	private DisplayImageOptions options;
 	private int imagePosition;
@@ -70,7 +71,7 @@ public class ImagePagerActivity extends BaseActivity{
 		.bitmapConfig(Bitmap.Config.RGB_565)
 		.build();
 		
-		pager = (ViewPager) this.findViewById(R.id.image_pager);
+		pager = (ExtendedViewPager) this.findViewById(R.id.image_pager);
 		pager.setAdapter(pagerAdapter);
 		pager.setCurrentItem(imagePosition);
 	}

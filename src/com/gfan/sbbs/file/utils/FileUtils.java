@@ -1,5 +1,8 @@
 package com.gfan.sbbs.file.utils;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,6 +11,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import com.gfan.sbbs.bean.Attachment;
+import com.gfan.sbbs.utils.StringUtils;
 
 public class FileUtils {
 
@@ -65,5 +69,18 @@ public class FileUtils {
 			attachmentList.add(new Attachment().setUrl(url));
 		}
 		return attachmentList;
+	}
+	/**
+	 * output debug info to sdcard
+	 * @param string
+	 * @throws IOException 
+	 */
+	public void writeToFile(String str) throws IOException{
+		File file = new File(StringUtils.getBasePath()+"debug.txt");
+		RandomAccessFile raf = new RandomAccessFile(file, "rw");
+		long filelength = file.length();
+		raf.seek(filelength);
+		raf.writeBytes(str);
+		raf.close();
 	}
 }

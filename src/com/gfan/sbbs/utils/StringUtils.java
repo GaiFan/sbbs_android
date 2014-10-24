@@ -59,4 +59,23 @@ public class StringUtils {
 		return basePath;
 	}
 	
+	public static File getCacheFilePath() throws IOException{
+		File cacheFilePath = new File(Environment.getExternalStorageDirectory(),
+				BASE_PATH);
+
+		if (!cacheFilePath.exists()) {
+			if (!cacheFilePath.mkdirs()) {
+				throw new IOException(String.format("%s cannot be created!",
+						cacheFilePath.toString()));
+			}
+		}
+
+		if (!cacheFilePath.isDirectory()) {
+			throw new IOException(String.format("%s is not a directory!",
+					cacheFilePath.toString()));
+		}
+
+		return cacheFilePath;
+	}
+	
 }

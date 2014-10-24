@@ -1,12 +1,15 @@
 package com.gfan.sbbs.utils.images;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
 import com.gfan.sbbs.othercomponent.MyApplication;
+import com.gfan.sbbs.utils.StringUtils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -46,6 +49,11 @@ public class ImageUtils {
 		canvas.drawBitmap(bitmap, rect, rect, paint);
 		return out;
 	}
+	
+	public static void backupImage(String url){
+		
+	}
+	
 	/**
 	 * compressed imageFiles for upload
 	 * 
@@ -53,7 +61,7 @@ public class ImageUtils {
 	 * @param quality
 	 * @return File compressed imageFiles
 	 */
-	public static void compressImages(String pathName, int quality,
+	public static String compressImages(String pathName, int quality,
 			Context context) {
 
 //		String pathName = imageFile.getAbsolutePath();
@@ -74,15 +82,27 @@ public class ImageUtils {
 
 		options.inJustDecodeBounds = false;
 		bitmap = BitmapFactory.decodeFile(pathName, options);
+		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		BufferedOutputStream bos;
 		try {
-			bos = new BufferedOutputStream(new FileOutputStream(pathName));
-			bitmap.compress(CompressFormat.JPEG, quality, bos);
+			bitmap.compress(CompressFormat.JPEG, quality, bytes);
+			
+			Random rand = new Random();
+			File f = new File(StringUtils.getCacheFilePath(),rand.nextLong()+".jpg");
+			bos = new BufferedOutputStream(new FileOutputStream(f));
+			Log.i(TAG, "file length is "+bytes.size());
+			bos.write(bytes.toByteArray());
 			bos.flush();
 			bos.close();
+			return  "file://"+f.getAbsolutePath();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		if(null != bitmap && !bitmap.isRecycled()){
+			bitmap.recycle();
+			bitmap = null;
+		}
+		return pathName;
 	}
 
 	/**

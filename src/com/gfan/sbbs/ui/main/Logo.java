@@ -1,7 +1,7 @@
 package com.gfan.sbbs.ui.main;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+//import java.util.Calendar;
+//import java.util.GregorianCalendar;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,7 +23,8 @@ public class Logo extends Activity{
 		super.onCreate(savedInstanceState);
 	    this.setContentView(R.layout.logo);
 	    iv = (ImageView) this.findViewById(R.id.logo_bg);
-	    hpBirthDay();
+	    Log.i(TAG, "app start!");
+//	    hpBirthDay();
 	}
 
 
@@ -56,18 +57,18 @@ public class Logo extends Activity{
 		});
 	}
 	/**
-	 * This method will change the startup screen at Sep 1st.And,it will do it once a year.
-	 * Just dedicate it to my beloved girl,happy birthday!
+	 * bye
+	 * 
 	 */
-	private void hpBirthDay(){
-		GregorianCalendar ca  = new GregorianCalendar();
-		int month = ca.get(Calendar.MONTH) + 1;
-		int day = ca.get(Calendar.DATE);
-		Log.i(TAG, "Today is "+month+"."+day);
-		if(month == YOUR_BIRTHDAY_MONTH && day == YOUR_BIRTHDAY_DAY){
-			Log.i(TAG, "Happy Birthday!");
-			iv.setImageResource(R.drawable.birthday_splash);
-		}
-	}
+//	private void hpBirthDay(){
+//		GregorianCalendar ca  = new GregorianCalendar();
+//		int month = ca.get(Calendar.MONTH) + 1;
+//		int day = ca.get(Calendar.DATE);
+//		Log.i(TAG, "Today is "+month+"."+day);
+//		if(month == YOUR_BIRTHDAY_MONTH && day == YOUR_BIRTHDAY_DAY){
+//			Log.i(TAG, "Happy Birthday!");
+//			iv.setImageResource(R.drawable.birthday_splash);
+//		}
+//	}
 
 }

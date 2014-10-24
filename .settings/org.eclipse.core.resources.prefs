@@ -1,4 +1,7 @@
-#Sat Nov 23 17:38:13 CST 2013
 eclipse.preferences.version=1
+encoding//res/values/strings.xml=UTF-8
 encoding//src/com/gfan/sbbs/othercomponent/BBSOperator.java=UTF-8
+encoding//src/com/gfan/sbbs/ui/Adapter/TopReplyAdapter.java=UTF-8
+encoding//src/com/gfan/sbbs/ui/Adapter/TopTenAdapter.java=UTF-8
+encoding//src/com/gfan/sbbs/ui/main/TopicList.java=UTF-8
 encoding//src/com/gfan/sbbs/utils/images/LazyImageLoader.java=UTF-8

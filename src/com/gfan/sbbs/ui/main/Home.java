@@ -49,7 +49,6 @@ public class Home extends SherlockFragmentActivity implements
 	private boolean onSearch = false;
 	private static final int MENU_SEARCH = 100000;// assign it a big number, in
 													// case conflict with others
-	private MyApplication application;
 
 	private static final String TAG = "HomeActivity";
 	
@@ -65,7 +64,6 @@ public class Home extends SherlockFragmentActivity implements
 		}
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.home);
-		application = (MyApplication) getApplication();
 		
 		schedule();// background data check
 		createShortCut();
@@ -80,7 +78,7 @@ public class Home extends SherlockFragmentActivity implements
 				.getWidth();
 
 		initPager();
-		application.setActivity(this);
+		MyApplication.getInstance().setActivity(this);
 	}
 
 	@Override
@@ -114,8 +112,9 @@ public class Home extends SherlockFragmentActivity implements
 		pagerAdapter.finishInit();
 		// TODO
 //		mHomePager.setOffscreenPageLimit(0);
-		Log.i(TAG, "start page is " + application.getStartPage());
-		if (MyApplication.getInstance().checkLogin() && application.getStartPage() == 1) {
+		Log.i(TAG, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		Log.i(TAG, "start page is " + MyApplication.getInstance().getStartPage());
+		if (MyApplication.getInstance().checkLogin() && MyApplication.getInstance().getStartPage() == 1) {
 			mHomePager.setCurrentItem(1);
 			getSupportActionBar().setNavigationMode(
 					ActionBar.NAVIGATION_MODE_STANDARD);
